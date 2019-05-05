@@ -3,6 +3,10 @@ then open command prompt and download all necessary libraries
 
 pip install selenium
 
+clone project
+
+git clone https://github.com/musamast/facebookScraper.git
+
 after this run script from command prompt or from anyother IDE:
 
 from command prompt
