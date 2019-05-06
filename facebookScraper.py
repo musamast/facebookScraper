@@ -35,15 +35,24 @@ def login(user,password):
 ## search pages for given keyword and number of pages want
 def search(keyword,page_count):
     driver.get(f'https://www.facebook.com/search/pages/?q={keyword}') ## search query
-    oldlen=len(driver.find_elements_by_class_name('_32mo')) ## number of pages on first display
-    while oldlen < int(page_count): ## looping while pages displaying on first hit is less than required pages
-        oldlen=len(driver.find_elements_by_class_name('_32mo'))
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);") ## scrolling window down if number pages display is less than required pages
-        time.sleep(3)
-        newlen=len(driver.find_elements_by_class_name('_32mo')) ## increment in number of pages displaying
-        if newlen == oldlen: ## stoping loop if no more pages available 
-            break
+    
+# Get scroll height
+    last_height = driver.execute_script("return document.body.scrollHeight")
+    print(f'Searching all pages related to {keyword} ..')
+    while True:
+    # Scroll down to bottom
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        print('Searching ..')
+    # Wait to load page
+        time.sleep(15)
 
+    # Calculate new scroll height and compare with last scroll height
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            pageslen=len(driver.find_elements_by_class_name('_32mo'))
+            print(f'{pageslen} pages found ..')
+            break
+        last_height = new_height
 def fetch_data():
     with open(f'{keyword}.csv', 'a') as csvfile:  ## creating csv files named based on keyword
         csvwriter = csv.writer(csvfile)
